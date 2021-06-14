@@ -20,11 +20,6 @@ public class CurriculaVitaesController {
         this.curriculaVitaeService = curriculaVitaeService;
     }
 
-//    @GetMapping("/getJobseekersWithCv")
-//    public DataResult<List<JobseekerWithCurriculaVitaeDto>> getJobseekerWithCv(@RequestParam int id) {
-//        return this.curriculaVitaeService.getJobSeekerWithCurriculaVitae(id);
-//    }
-
     @GetMapping("/getCvWithJobSeekerId")
     public DataResult<CurriculaVitae> findCvByJobSeekerId(int jobseekerId) {
         return this.curriculaVitaeService.findByJobSeekerId(jobseekerId);

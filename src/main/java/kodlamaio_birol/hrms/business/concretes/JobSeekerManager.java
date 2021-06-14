@@ -1,6 +1,7 @@
 package kodlamaio_birol.hrms.business.concretes;
 
 import kodlamaio_birol.hrms.business.abstracts.JobSeekerService;
+import kodlamaio_birol.hrms.core.services.HumanChecker;
 import kodlamaio_birol.hrms.core.services.MernisCheckService;
 import kodlamaio_birol.hrms.core.utilities.EmailValidator;
 import kodlamaio_birol.hrms.core.utilities.results.*;
@@ -15,11 +16,13 @@ import java.util.List;
 public class JobSeekerManager implements JobSeekerService {
     private final JobSeekerDao jobSeekerDao;
     private final MernisCheckService mernisCheckService;
+    private final HumanChecker humanChecker;
 
     @Autowired
-    public JobSeekerManager(JobSeekerDao jobSeekerDao, MernisCheckService mernisCheckService) {
+    public JobSeekerManager(JobSeekerDao jobSeekerDao, MernisCheckService mernisCheckService, HumanChecker humanChecker) {
         this.jobSeekerDao = jobSeekerDao;
         this.mernisCheckService = mernisCheckService;
+        this.humanChecker = humanChecker;
     }
 
     @Override
@@ -36,7 +39,10 @@ public class JobSeekerManager implements JobSeekerService {
         try {
             if (!EmailValidator.emailFormatController(jobSeeker.getEmail())) {
                 return new ErrorResult("Error: Mail formata uygun değil!");
-            } else if (!mernisCheckService.isMernis(jobSeeker)) {
+            }else if(!humanChecker.isValid(jobSeeker)){
+                return  new ErrorResult("Kimlik doğrulama hatası");
+            }
+            else if (!mernisCheckService.isMernis(jobSeeker)) {
                 return new ErrorResult("Error: Gerçek bir kişi değil!");
             } else {
                 this.jobSeekerDao.save(jobSeeker);
