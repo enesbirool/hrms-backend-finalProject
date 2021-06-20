@@ -25,7 +25,7 @@ public class CurriculaVitae {
     private String coverLetter;
 
     @Column(name = "picture_url")
-    private String pictureUrl = "https://res.cloudinary.com/torukobyte/image/upload/v1623515256/customer_rca6tq.png";
+    private String pictureUrl = "https://res.cloudinary.com/mxbozkurt/image/upload/v1623515256/customer_rca6tq.png";
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "social_media_id")

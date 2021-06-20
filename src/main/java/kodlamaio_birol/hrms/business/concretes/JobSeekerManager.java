@@ -1,6 +1,7 @@
 package kodlamaio_birol.hrms.business.concretes;
 
 import kodlamaio_birol.hrms.business.abstracts.JobSeekerService;
+import kodlamaio_birol.hrms.business.constants.Messages;
 import kodlamaio_birol.hrms.core.services.HumanChecker;
 import kodlamaio_birol.hrms.core.services.MernisCheckService;
 import kodlamaio_birol.hrms.core.utilities.EmailValidator;
@@ -38,25 +39,22 @@ public class JobSeekerManager implements JobSeekerService {
     public Result addJobSeeker(JobSeeker jobSeeker) {
         try {
             if (!EmailValidator.emailFormatController(jobSeeker.getEmail())) {
-                return new ErrorResult("Error: Mail formata uygun değil!");
+                return new ErrorResult(Messages.EmailFormatError);
             }else if(!humanChecker.isValid(jobSeeker)){
-                return  new ErrorResult("Kimlik doğrulama hatası");
+                return new ErrorResult(Messages.HumanIdentityError);
             }
-            else if (!mernisCheckService.isMernis(jobSeeker)) {
-                return new ErrorResult("Error: Gerçek bir kişi değil!");
-            } else {
+            else {
                 this.jobSeekerDao.save(jobSeeker);
-                return new SuccessResult(
-                        "Success: İş arayan kullanıcı sisteme eklendi, Doğrulama kodu email adresinize gönderildi!");
+                return new SuccessResult(Messages.JobSeekerAddedSuccess);
             }
-        } catch (Exception e) {
+        }catch (Exception e){
             if (e.getMessage()
-                 .contains("[uc_users_email]")) {
-                return new ErrorResult("Error: Eposta sistemde mevcut, lütfen başka bir eposta adresi giriniz!");
+                    .equals("could not execute statement; SQL [n/a]; constraint [uc_users_email]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement")) {
+                return new ErrorResult(Messages.ExistEMailError);
             } else {
-                return new ErrorResult(
-                        "Error: Kimlik numarası sistem de kayıtlı, lütfen başka bir kimlik numarası giriniz!");
+                return new ErrorResult(Messages.JobSeekerAddErrorHumanIdentity);
             }
+
         }
     }
 
