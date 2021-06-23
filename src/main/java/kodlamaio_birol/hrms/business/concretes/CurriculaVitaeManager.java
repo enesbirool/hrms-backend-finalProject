@@ -31,17 +31,6 @@ public class CurriculaVitaeManager implements CurriculaVitaeService {
         return new SuccessResult("Success: Cv başarıyla eklendi!");
     }
 
-//    @Override
-//    public DataResult<List<JobseekerWithCurriculaVitaeDto>> getJobSeekerWithCurriculaVitae(int id) {
-//        if (this.curriculaVitaeDao.getJobSeekerWithCurriculaVitae(id).isEmpty()) {
-//            return new WarningDataResult<>("Warning: Kayıtlı Cv bulunamadı!");
-//        } else {
-//            return new SuccessDataResult<>(
-//                    this.curriculaVitaeDao.getJobSeekerWithCurriculaVitae(id),
-//                    "Success: Cv'ler başarıyla listelendi!");
-//
-//        }
-//    }
 
     @Override
     public DataResult<CurriculaVitae> findByJobSeekerId(int jobseekerId) {

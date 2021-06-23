@@ -11,10 +11,7 @@ public interface CurriculaVitaeService {
 
     Result addCv(CurriculaVitae curriculaVitae);
 
-//    DataResult<List<JobseekerWithCurriculaVitaeDto>> getJobSeekerWithCurriculaVitae(int id);
-
     DataResult<CurriculaVitae> findByJobSeekerId(int jobseekerId);
 
-    //!addCvWithPicture yazılacak..
     Result uploadPicture(int cvId, MultipartFile file) throws IOException;
 }

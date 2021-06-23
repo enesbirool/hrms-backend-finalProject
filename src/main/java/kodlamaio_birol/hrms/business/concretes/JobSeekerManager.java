@@ -9,6 +9,8 @@ import kodlamaio_birol.hrms.core.utilities.results.*;
 import kodlamaio_birol.hrms.dataAccess.abstracts.JobSeekerDao;
 import kodlamaio_birol.hrms.entities.concretes.JobSeeker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +20,14 @@ public class JobSeekerManager implements JobSeekerService {
     private final JobSeekerDao jobSeekerDao;
     private final MernisCheckService mernisCheckService;
     private final HumanChecker humanChecker;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     public JobSeekerManager(JobSeekerDao jobSeekerDao, MernisCheckService mernisCheckService, HumanChecker humanChecker) {
         this.jobSeekerDao = jobSeekerDao;
         this.mernisCheckService = mernisCheckService;
         this.humanChecker = humanChecker;
+        this.passwordEncoder= new BCryptPasswordEncoder();
     }
 
     @Override
@@ -37,26 +41,19 @@ public class JobSeekerManager implements JobSeekerService {
 
     @Override
     public Result addJobSeeker(JobSeeker jobSeeker) {
-        try {
             if (!EmailValidator.emailFormatController(jobSeeker.getEmail())) {
                 return new ErrorResult(Messages.EmailFormatError);
-            }else if(!humanChecker.isValid(jobSeeker)){
-                return new ErrorResult(Messages.HumanIdentityError);
             }
+//            else if(!humanChecker.isValid(jobSeeker)){
+//                return new ErrorResult(Messages.HumanIdentityError);
+//            }
             else {
+                jobSeeker.setPassword(this.passwordEncoder.encode(jobSeeker.getPassword()));
                 this.jobSeekerDao.save(jobSeeker);
                 return new SuccessResult(Messages.JobSeekerAddedSuccess);
             }
-        }catch (Exception e){
-            if (e.getMessage()
-                    .equals("could not execute statement; SQL [n/a]; constraint [uc_users_email]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement")) {
-                return new ErrorResult(Messages.ExistEMailError);
-            } else {
-                return new ErrorResult(Messages.JobSeekerAddErrorHumanIdentity);
-            }
 
         }
-    }
 
     @Override
     public Result deleteJobSeekerById(int jobSeekerId) {
