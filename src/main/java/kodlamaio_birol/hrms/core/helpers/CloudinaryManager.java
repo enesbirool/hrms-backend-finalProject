@@ -22,9 +22,9 @@ public class CloudinaryManager implements CloudinaryService {
 
     public CloudinaryManager() {
         cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "torukobyte",
-                "api_key", "592843263361368",
-                "api_secret", "M3qBYqB4CD2LYsRq0d9umRZG1Rs"));
+                "cloud_name", "---",
+                "api_key", "---",
+                "api_secret", "---"));
     }
 
     @Override
